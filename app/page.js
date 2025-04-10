@@ -6,7 +6,26 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [translated, setTranslated] = useState("");
   const [direction, setDirection] = useState("hindi");
-  const speechRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const speechRef = useRef(null);
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+
+  const handleGeminiTranslate = async () => {
+    try {
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: prompt }),
+      });
+      const data = await res.json();
+      setResponse(data.summary);
+      console.log(data.summary,response)
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   const handleTranslate = async () => {
     const res = await fetch("/api/translate", {
@@ -53,8 +72,11 @@ export default function Home() {
         <div className="mb-6">
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="w-full border border-gray-300 rounded-2xl p-4 text-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            onChange={(e) => {
+              setInput(e.target.value)
+              setPrompt(e.target.value)
+            }}
+            className="w-full border border-gray-300 rounded-2xl p-4 text-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-black"
             rows={5}
             placeholder={
               direction === "hindi"
@@ -66,8 +88,14 @@ export default function Home() {
 
         <div className="flex flex-wrap gap-3 justify-center mb-6">
           <button
-            onClick={handleTranslate}
-            className="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition font-semibold"
+            onClick={
+              ()=>{
+                handleTranslate()
+                handleGeminiTranslate()
+
+              }
+            }
+            className="cursor-pointer bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition font-semibold"
           >
             🔁 अनुवाद करें
           </button>
@@ -103,12 +131,13 @@ export default function Home() {
           </select>
         </div>
 
-        {translated && (
+        {(translated || response) && (
           <div className="mt-6 p-6 bg-green-50 border border-green-300 rounded-2xl shadow">
             <h2 className="text-xl font-semibold text-green-700 mb-2">
               🎉 अनुवादित वाक्य:
             </h2>
-            <p className="text-lg text-gray-800 whitespace-pre-line">{translated}</p>
+            <p className="text-lg text-gray-800 whitespace-pre-line">MY MODEL: {translated}</p>
+            <p className="text-lg text-black whitespace-pre-line">GEMINI: {response}</p>
           </div>
         )}
       </div>
