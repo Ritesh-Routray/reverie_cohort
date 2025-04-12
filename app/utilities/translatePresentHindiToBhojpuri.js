@@ -36,6 +36,7 @@ export default function translateSimplePresent(text, dictionary) {
     "उठता",
     "उठती",
     "उठते",
+    "खेलता",
   ];
 
   const pronounMap = {
@@ -89,9 +90,10 @@ export default function translateSimplePresent(text, dictionary) {
     words.pop();
   }
 
+  const secondLastWord = words[words.length-2]; //second last word in the sentence
+
   const subject = words[0];
   const pronounInfo = pronounMap[subject];
-  if (!pronounInfo) return "❌ Unknown subject";
 
   const person = pronounInfo.person;
   const subjectBhojpuri = pronounInfo.bhojpuri;
@@ -105,12 +107,11 @@ export default function translateSimplePresent(text, dictionary) {
       verbRoot = word.replace(/(ता|ती|ते)$/, ""); // ✂️ remove suffix
       break;
     }
+    else matchedVerb = secondLastWord; //if no verb is found then take the second last word as the verb
   }
 
-  if (!verbRoot) return "❌ Verb not found";
-
   // ✅ Choose verb form based on person
-  let verb = "";
+  let bhojpuriVerb = "";
   if (person === "1st") verb = `${verbRoot}अ`;
   else if (person === "2nd") verb = `${verbRoot}अ`;
   else if (person === "3rd") verb = `${verbRoot}एला`;
@@ -123,5 +124,5 @@ export default function translateSimplePresent(text, dictionary) {
     .map((w) => dictionary[w] || w)
     .join(" ");
 
-  return `${subjectBhojpuri} ${verb} ${object}`.trim();
+  return `${subjectBhojpuri} ${bhojpuriVerb} ${object}`.trim();
 }
