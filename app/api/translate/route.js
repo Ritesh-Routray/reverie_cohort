@@ -8,7 +8,7 @@ import translatePresentContinuous from "@/app/utilities/translatePresentContinuo
 import translateSimplePresent from "@/app/utilities/translatePresentHindiToBhojpuri"; // Your simple present function
 
 // Detect type of present tense
-function detectPresentTenseType(text) {
+export default function detectPresentTenseType(text) {
   const clean = text.trim().toLowerCase();
 
   if (/से.*रहा हूँ|से.*रही हूँ|से.*रहे हो/.test(clean))
@@ -17,25 +17,37 @@ function detectPresentTenseType(text) {
   if (
     clean.includes("चुका हूँ") ||
     clean.includes("चुकी हूँ") ||
-    clean.includes("चुके हैं")
+    clean.includes("चुके हैं") ||
+    clean.includes("चुका है") ||
+    clean.includes("चुका हो") ||
+    clean.includes("चुकी हो") ||
+    clean.includes("चुके हो") ||
+    clean.includes("चुका") ||
+    clean.includes("चुकी") ||
+    clean.includes("चुके")
   )
     return "presentPerfect";
 
-  // if (
-  //   clean.includes("हूँ") ||
-  //   clean.includes("हो") ||
-  //   clean.includes("ह") ||
-  //   clean.includes("है")
-  // )
-  //   return "presentContinuous";
+  if (
+    clean.includes("रहा हूँ") ||
+    clean.includes("रहा हो") ||
+    clean.includes("रहा ह") ||
+    clean.includes("रहा है") ||
+    clean.includes("रही हूँ") ||
+    clean.includes("रही हो") ||
+    clean.includes("रही ह") ||
+    clean.includes("रही है") ||
+    clean.includes("रहे हो") 
+  )
+    return "presentContinuous";
 
   if (
-    (clean.includes("है") ||
-      clean.includes("हो") ||
-      clean.includes("हूँ") ||
-      clean.includes("हैं") ||
-      clean.includes("हों")
-    ))
+    clean.includes("है") ||
+    clean.includes("हो") ||
+    clean.includes("हूँ") ||
+    clean.includes("हैं") ||
+    clean.includes("हों")
+  )
     return "presentSimple";
 
   return null;
@@ -51,7 +63,7 @@ export async function POST(request) {
 
   const tenseType = detectPresentTenseType(text);
 
-  let translated = "❌ Unable to detect tense.";
+  let translated = ""
 
   switch (tenseType) {
     case "presentSimple":

@@ -36,16 +36,17 @@ export default function translateSimplePresent(text, dictionary) {
     "उठता",
     "उठती",
     "उठते",
+    "खेलता",
   ];
 
   const pronounMap = {
     मैं: {
       bhojpuri: "हम",
-      person: "1st",
+      person: "3rd",
       number: "singular",
       honorific: false,
     },
-    हम: { bhojpuri: "हम", person: "1st", number: "plural", honorific: false },
+    हम: { bhojpuri: "हम", person: "3rd", number: "plural", honorific: false },
     हमनी: {
       bhojpuri: "हमनी",
       person: "1st",
@@ -89,9 +90,10 @@ export default function translateSimplePresent(text, dictionary) {
     words.pop();
   }
 
+  const secondLastWord = words[words.length-2]; //second last word in the sentence
+
   const subject = words[0];
   const pronounInfo = pronounMap[subject];
-  if (!pronounInfo) return "❌ Unknown subject";
 
   const person = pronounInfo.person;
   const subjectBhojpuri = pronounInfo.bhojpuri;
@@ -105,16 +107,15 @@ export default function translateSimplePresent(text, dictionary) {
       verbRoot = word.replace(/(ता|ती|ते)$/, ""); // ✂️ remove suffix
       break;
     }
+    else matchedVerb = secondLastWord; //if no verb is found then take the second last word as the verb
   }
 
-  if (!verbRoot) return "❌ Verb not found";
-
   // ✅ Choose verb form based on person
-  let verb = "";
-  if (person === "1st") verb = `${verbRoot}अ`;
-  else if (person === "2nd") verb = `${verbRoot}अ`;
-  else if (person === "3rd") verb = `${verbRoot}एला`;
-  else verb = verbRoot;
+  let bhojpuriVerb = "";
+  if (person === "1st") bhojpuriVerb = `${verbRoot}अ`;
+  else if (person === "2nd") bhojpuriVerb = `${verbRoot}अ`;
+  else if (person === "3rd") bhojpuriVerb = `${verbRoot}एला`;
+  else bhojpuriVerb = verbRoot;
 
   // ✅ Build object excluding the matched verb
   const object = words
@@ -123,5 +124,5 @@ export default function translateSimplePresent(text, dictionary) {
     .map((w) => dictionary[w] || w)
     .join(" ");
 
-  return `${subjectBhojpuri} ${verb} ${object}`.trim();
+  return `${subjectBhojpuri} ${bhojpuriVerb} ${object}`.trim();
 }

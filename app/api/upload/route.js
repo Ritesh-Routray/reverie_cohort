@@ -9,7 +9,9 @@ export default function Home() {
   const speechRef = useRef(null);
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
-  const [fileTranslation, setFileTranslation] = useState("");
+
+  const [fileText, setFileText] = useState(""); // file content
+  const [fileTranslation, setFileTranslation] = useState(""); // translated result
 
   const handleGeminiTranslate = async () => {
     try {
@@ -67,26 +69,33 @@ export default function Home() {
     }
 
     const reader = new FileReader();
-    reader.onload = async (event) => {
-      const fileText = event.target.result;
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: fileText }),
-      });
-
-      const data = await res.json();
-      setFileTranslation(data.translated);
+    reader.onload = (event) => {
+      const content = event.target.result;
+      setFileText(content); // ✅ store for later use
     };
 
     reader.readAsText(file, "UTF-8");
   };
 
+  const handleCorpusTranslate = async () => {
+    if (!fileText) {
+      alert("पहले .txt फाइल अपलोड करें।");
+      return;
+    }
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: fileText }),
+    });
+
+    const data = await res.json();
+    setFileTranslation(data.translated);
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 px-4 py-10 sm:px-8 font-sans">
       <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-3xl p-8 sm:p-12 border border-blue-100 relative overflow-hidden">
-        {/* Decorative circles */}
         <div className="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-indigo-100 opacity-50"></div>
         <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full bg-blue-100 opacity-60"></div>
 
@@ -150,14 +159,20 @@ export default function Home() {
             {/* 📁 File Upload */}
             <div className="mt-6">
               <label className="block mb-2 text-gray-700 font-medium">
-                या .txt फाइल अपलोड करें:
+                .txt फाइल अपलोड करें:
               </label>
               <input
                 type="file"
                 accept=".txt"
                 onChange={handleFileUpload}
-                className="bg-white p-2 border border-gray-300 rounded-md shadow-sm"
+                className="bg-white p-2 border border-gray-300 rounded-md shadow-sm mb-4"
               />
+              <button
+                onClick={handleCorpusTranslate}
+                className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition shadow-sm"
+              >
+                📁 फाइल अनुवाद करें
+              </button>
             </div>
           </div>
 
@@ -199,7 +214,7 @@ export default function Home() {
                   {translated && (
                     <div className="bg-white p-4 rounded-xl shadow-sm">
                       <div className="text-sm font-medium text-blue-600 mb-2">
-                        API 1
+                        MY MODEL
                       </div>
                       <p className="text-lg text-gray-800 whitespace-pre-line">
                         {translated}
@@ -210,7 +225,7 @@ export default function Home() {
                   {response && (
                     <div className="bg-white p-4 rounded-xl shadow-sm">
                       <div className="text-sm font-medium text-indigo-600 mb-2">
-                        API 2
+                        GEMINI
                       </div>
                       <p className="text-lg text-gray-800 whitespace-pre-line">
                         {response}
@@ -232,10 +247,6 @@ export default function Home() {
               </div>
             </div>
           )}
-
-          <div className="mt-8 text-center text-sm text-gray-500">
-            Dialectal • भारतीय भाषाओं का अनुवादक • © 2025
-          </div>
         </div>
       </div>
     </main>
