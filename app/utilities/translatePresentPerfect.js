@@ -15,7 +15,7 @@ export default function translatePresentPerfect(text, dictionary) {
 
   const pronounMap = {
     मैं: { bhojpuri: "हम", person: "3rd" },
-    हम: { bhojpuri: "हम", person: "1st" },
+    हम: { bhojpuri: "हम", person: "3rd" },
     तू: { bhojpuri: "तू", person: "2nd" },
     तुम: { bhojpuri: "तोहरा", person: "2nd" },
     आप: { bhojpuri: "रउआ", person: "2nd" },

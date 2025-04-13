@@ -46,7 +46,7 @@ export default function translateSimplePresent(text, dictionary) {
       number: "singular",
       honorific: false,
     },
-    हम: { bhojpuri: "हम", person: "1st", number: "plural", honorific: false },
+    हम: { bhojpuri: "हम", person: "3rd", number: "plural", honorific: false },
     हमनी: {
       bhojpuri: "हमनी",
       person: "1st",
