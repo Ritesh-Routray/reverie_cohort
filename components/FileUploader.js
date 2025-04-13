@@ -1,50 +1,50 @@
 'use client'
+
 import { useState } from 'react'
 
-export default function Home() {
-  const [file, setFile] = useState(null)
+export default function FileUploader() {
   const [translation, setTranslation] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleUpload = async () => {
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
     const formData = new FormData()
-    formData.append('file', file) // selectedFile is your input file
-  
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-  
-    const data = await res.json()
-    console.log('Translation:', data.translation)
+    formData.append('file', file)
+
+    setLoading(true)
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+      setTranslation(data.translation || 'Translation failed.')
+    } catch (error) {
+      console.error('Upload failed:', error)
+      setTranslation('Something went wrong!')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  console.log(file)
-  
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen gap-4 p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold">Bhojpuri Translator (PDF / TXT)</h1>
-
+    <div className="p-4 max-w-xl mx-auto">
       <input
         type="file"
-        accept=".pdf,.txt"
-        onChange={(e) => setFile(e.target.files[0])}
-        className="p-2 border border-gray-300 rounded"
+        accept=".txt,.pdf"
+        onChange={handleFileChange}
+        className="mb-4"
       />
-
-      <button
-        onClick={handleUpload}
-        className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-      >
-        {loading ? 'Translating...' : 'Upload and Translate'}
-      </button>
-
+      {loading && <p className="text-blue-500">Translating...</p>}
       {translation && (
-        <div className="w-full max-w-3xl p-4 mt-6 bg-white border rounded shadow">
-          <h2 className="mb-2 text-xl font-semibold">Bhojpuri Translation:</h2>
-          <p className="whitespace-pre-line">{translation}</p>
+        <div className="mt-4 bg-gray-100 p-4 rounded">
+          <h2 className="font-bold">Bhojpuri Translation:</h2>
+          <p>{translation}</p>
         </div>
       )}
-    </main>
+    </div>
   )
 }
