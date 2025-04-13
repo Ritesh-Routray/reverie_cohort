@@ -8,7 +8,7 @@ import translatePresentContinuous from "@/app/utilities/translatePresentContinuo
 import translateSimplePresent from "@/app/utilities/translatePresentHindiToBhojpuri"; // Your simple present function
 
 // Detect type of present tense
-function detectPresentTenseType(text) {
+export default function detectPresentTenseType(text) {
   const clean = text.trim().toLowerCase();
 
   if (/से.*रहा हूँ|से.*रही हूँ|से.*रहे हो/.test(clean))
@@ -17,7 +17,14 @@ function detectPresentTenseType(text) {
   if (
     clean.includes("चुका हूँ") ||
     clean.includes("चुकी हूँ") ||
-    clean.includes("चुके हैं")
+    clean.includes("चुके हैं") ||
+    clean.includes("चुका है") ||
+    clean.includes("चुका हो") ||
+    clean.includes("चुकी हो") ||
+    clean.includes("चुके हो") ||
+    clean.includes("चुका") ||
+    clean.includes("चुकी") ||
+    clean.includes("चुके")
   )
     return "presentPerfect";
 

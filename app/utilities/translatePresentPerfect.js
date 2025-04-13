@@ -14,7 +14,7 @@ export default function translatePresentPerfect(text, dictionary) {
   ];
 
   const pronounMap = {
-    मैं: { bhojpuri: "हम", person: "1st" },
+    मैं: { bhojpuri: "हम", person: "3rd" },
     हम: { bhojpuri: "हम", person: "1st" },
     तू: { bhojpuri: "तू", person: "2nd" },
     तुम: { bhojpuri: "तोहरा", person: "2nd" },
@@ -36,9 +36,8 @@ export default function translatePresentPerfect(text, dictionary) {
   const secondLastWord = words[words.length - 2];
   const subject = words[0];
   const pronounInfo = pronounMap[subject];
-  if (!pronounInfo) return "❌ Unknown subject";
 
-  const subjectBhojpuri = pronounInfo.bhojpuri;
+  const subjectBhojpuri = pronounInfo?.bhojpuri || subject;
 
   let verbRoot = "";
   for (const word of words) {
@@ -51,7 +50,7 @@ export default function translatePresentPerfect(text, dictionary) {
 
   if (!verbRoot) return "❌ Verb not found";
 
-  const verb = `${verbRoot} ले बानी`;
+  const verb = `${verbRoot} ले बा`;
 
   const object = words
     .slice(1)
@@ -59,5 +58,5 @@ export default function translatePresentPerfect(text, dictionary) {
     .map((w) => dictionary[w] || w)
     .join(" ");
 
-  return `${subjectBhojpuri} ${verb} ${object}`.trim();
+  return `${subjectBhojpuri} ${verb}`.trim();
 }

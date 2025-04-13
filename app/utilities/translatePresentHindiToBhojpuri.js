@@ -42,7 +42,7 @@ export default function translateSimplePresent(text, dictionary) {
   const pronounMap = {
     मैं: {
       bhojpuri: "हम",
-      person: "1st",
+      person: "3rd",
       number: "singular",
       honorific: false,
     },
@@ -112,10 +112,10 @@ export default function translateSimplePresent(text, dictionary) {
 
   // ✅ Choose verb form based on person
   let bhojpuriVerb = "";
-  if (person === "1st") verb = `${verbRoot}अ`;
-  else if (person === "2nd") verb = `${verbRoot}अ`;
-  else if (person === "3rd") verb = `${verbRoot}एला`;
-  else verb = verbRoot;
+  if (person === "1st") bhojpuriVerb = `${verbRoot}अ`;
+  else if (person === "2nd") bhojpuriVerb = `${verbRoot}अ`;
+  else if (person === "3rd") bhojpuriVerb = `${verbRoot}एला`;
+  else bhojpuriVerb = verbRoot;
 
   // ✅ Build object excluding the matched verb
   const object = words
