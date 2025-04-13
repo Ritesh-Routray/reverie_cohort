@@ -20,8 +20,6 @@ export default function Home() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer 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`,
-            "Content-Type": "application/json",
           },
           body: JSON.stringify({ inputs: String(input) }),
         }
