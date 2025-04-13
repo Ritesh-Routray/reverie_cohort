@@ -1,5 +1,6 @@
 "use client";
 
+import FileUploader from "@/components/FileUploader";
 import { useRef, useState } from "react";
 
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
   const speechRef = useRef(null);
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
-  const [fileTranslation, setFileTranslation] = useState("");
+  // const [fileTranslation, setFileTranslation] = useState("");
 
   const handleGeminiTranslate = async () => {
     try {
@@ -59,30 +60,31 @@ export default function Home() {
     recognition.start();
   };
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file || !file.name.endsWith(".txt")) {
-      alert("कृपया एक .txt फ़ाइल अपलोड करें");
-      return;
-    }
+  // const handleFileUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file || !file.name.endsWith(".txt")) {
+  //     alert("कृपया एक .txt फ़ाइल अपलोड करें");
+  //     return;
+  //   }
+  //   console.log(file)
+  //   const reader = new FileReader();
+  //   reader.onload = async (event) => {
+  //     const fileText = event.target.result;
 
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const fileText = event.target.result;
+  //     const res = await fetch("/api/upload", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ text: fileText }),
+  //     });
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: fileText }),
-      });
+  //     const data = await res.json();
+  //     setFileTranslation(data.translated);
+  //   };
 
-      const data = await res.json();
-      setFileTranslation(data.translated);
-    };
+  //   reader.readAsText(file, "UTF-8");
+  // };
 
-    reader.readAsText(file, "UTF-8");
-  };
-
+  // console.log(fileTranslation)
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-100 to-blue-200 px-4 py-10 sm:px-8 font-sans">
       <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-3xl p-8 sm:p-12 border border-blue-100 relative overflow-hidden">
@@ -148,17 +150,7 @@ export default function Home() {
             </div>
 
             {/* 📁 File Upload */}
-            <div className="mt-6">
-              <label className="block mb-2 text-gray-700 font-medium">
-                या .txt फाइल अपलोड करें:
-              </label>
-              <input
-                type="file"
-                accept=".txt"
-                onChange={handleFileUpload}
-                className="bg-white p-2 border border-gray-300 rounded-md shadow-sm"
-              />
-            </div>
+            <FileUploader/>
           </div>
 
           <div className="flex flex-wrap gap-3 justify-center mb-8">
@@ -185,7 +177,7 @@ export default function Home() {
             </button>
           </div>
 
-          {(translated || response || fileTranslation) && (
+          {(translated || response) && (
             <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-indigo-100 rounded-2xl shadow relative overflow-hidden">
               <div className="absolute -top-10 -right-10 w-20 h-20 rounded-full bg-indigo-100 opacity-60"></div>
               <div className="absolute -bottom-8 -left-8 w-16 h-16 rounded-full bg-blue-100 opacity-50"></div>
@@ -218,7 +210,7 @@ export default function Home() {
                     </div>
                   )}
 
-                  {fileTranslation && (
+                  {/* {fileTranslation && (
                     <div className="bg-white p-4 rounded-xl shadow-sm">
                       <div className="text-sm font-medium text-green-600 mb-2">
                         📁 फ़ाइल अनुवाद
@@ -227,7 +219,7 @@ export default function Home() {
                         {fileTranslation}
                       </p>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

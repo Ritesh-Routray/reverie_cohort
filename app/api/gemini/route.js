@@ -10,6 +10,11 @@ const model = genAI.getGenerativeModel({
 export async function POST(req) {
   try {
     const data = await req.json();
+    const file = await req.file
+
+    if(file){
+      console.log(file)
+    }
     const prompt = `Convert this sentence to bhojpuri sentence ${data.text}. Just give me that exact sentence and nothing else.`
 
     const result = await model.generateContent(prompt);
