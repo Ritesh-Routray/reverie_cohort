@@ -20,13 +20,16 @@ export default function Home() {
         {
           method: "POST",
           headers: {
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ inputs: String(input) }),
         }
       );
 
       const data = await res.json();
+      console.log(data)
       const output = data[0]?.generated_text;
+      console.log(output)
       setTranslated(output || "❌ Translation failed");
     } else if (engine === "gemini") {
       const res = await fetch("/api/gemini", {
@@ -39,7 +42,7 @@ export default function Home() {
 
       const data = await res.json();
       console.log(data);
-      setTranslated(data.ans);
+      setTranslated(data.ans || "❌ Gemini translation failed");
     }
   };
 
@@ -110,21 +113,21 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
             <div className="flex gap-4 flex-wrap items-center">
-              <label className="text-gray-700 font-medium">दिशा:</label>
+              <label className="text-gray-700  font-bold">दिशा:</label>
               <select
                 value={direction}
                 onChange={(e) => setDirection(e.target.value)}
-                className="bg-white px-4 py-2 rounded-full border shadow-sm"
+                className="bg-white px-4 py-2 rounded-full  shadow-sm text-black"
               >
                 <option value="hindi">हिंदी ➝ भोजपुरी</option>
                 <option value="bhojpuri">भोजपुरी ➝ हिंदी</option>
               </select>
 
-              <label className="ml-6 text-gray-700 font-medium">मॉडल:</label>
+              <label className="ml-6 text-gray-700 font-bold">मॉडल:</label>
               <select
                 value={engine}
                 onChange={(e) => setEngine(e.target.value)}
-                className="bg-white px-4 py-2 rounded-full border shadow-sm"
+                className="bg-white px-4 py-2 rounded-full shadow-sm text-black outline-none"
               >
                 <option value="huggingface">API1</option>
                 <option value="gemini">API2</option>

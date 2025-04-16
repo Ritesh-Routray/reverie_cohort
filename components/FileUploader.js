@@ -31,18 +31,18 @@ export default function FileUploader() {
   }
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
+    <div className="p-4 max-w-xl mx-auto ">
       <input
         type="file"
         accept=".txt,.pdf"
         onChange={handleFileChange}
-        className="mb-4"
+        className="mb-4 text-black border border-gray-300 rounded-2xl p-2 px-4"
       />
       {loading && <p className="text-blue-500">Translating...</p>}
       {translation && (
         <div className="mt-4 bg-gray-100 p-4 rounded">
-          <h2 className="font-bold">Bhojpuri Translation:</h2>
-          <p>{translation}</p>
+          <h2 className="font-bold text-black">Bhojpuri Translation:</h2>
+          <p className='text-black'>{translation}</p>
         </div>
       )}
     </div>
