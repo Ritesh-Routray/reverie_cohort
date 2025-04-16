@@ -25,6 +25,7 @@ export default function detectPresentTenseType(text) {
     clean.includes("चुका") ||
     clean.includes("चुकी") ||
     clean.includes("चुके")
+
   )
     return "presentPerfect";
 

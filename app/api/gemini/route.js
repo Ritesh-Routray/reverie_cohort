@@ -15,11 +15,11 @@ export async function POST(req) {
     if(file){
       console.log(file)
     }
-    const prompt = `Convert this sentence to bhojpuri sentence ${data.text}. Just give me that exact sentence and nothing else.`
-
+    const prompt = `Convert this sentence to bhojpuri sentence ${data.inputs}. Just give me that exact sentence and nothing else.`;
     const result = await model.generateContent(prompt);
+    const ans = result.response.text().replace(/<[^>]+>/g, "").trim();
 
-    return NextResponse.json({ summary: result.response.text() });
+    return NextResponse.json({ ans });
   } catch (error) {
     console.error("Error generating content:", error);
     return NextResponse.json({ error: "Failed to generate content" }, { status: 500 });
