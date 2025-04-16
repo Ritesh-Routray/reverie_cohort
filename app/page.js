@@ -16,7 +16,7 @@ export default function Home() {
 
     if (engine === "huggingface") {
       const res = await fetch(
-        //"https://api-inference.huggingface.co/models/rrgr8/bhojpuri-translator",
+        "https://api-inference.huggingface.co/models/rrgr8/bhojpuri-translator",
         {
           method: "POST",
           headers: {
